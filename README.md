@@ -74,9 +74,10 @@ sdk核心功能： 交换token，生成授权链接，调用api接口
 
     {% load duoshuo_tags %}
 
-    <del>{% duoshuo_comments %}</del>
+    {% duoshuo_comments %}
 
-    <del>#给多说评论框传递其他short name</del>
-    <del>{% duoshuo_comments '其他short name' %}</del>
+    # 给多说评论框传递其他short name
+    {% duoshuo_comments '其他short name' %}
 
+    # 我扩展的 tag
     {% my_duoshuo_comments data_thread_key data_title data_url %}
