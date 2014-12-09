@@ -1,3 +1,9 @@
+# 声明 (What's this)
+
+对于 perchouli 的多说 django 部分进行了部分修改,
+
+添加了 `data-thread-key` `data-title` `data-url` 的支持. 详见 [Django useage](#django-usage)
+
 ![Banner](https://raw.github.com/perchouli/img/master/banner-772x250.png)
 
 # Duoshuo Python SDK
@@ -68,8 +74,9 @@ sdk核心功能： 交换token，生成授权链接，调用api接口
 
     {% load duoshuo_tags %}
 
-    {% duoshuo_comments %}
+    <del>{% duoshuo_comments %}</del>
 
-    #给多说评论框传递其他short name
-    {% duoshuo_comments '其他short name' %}
+    <del>#给多说评论框传递其他short name</del>
+    <del>{% duoshuo_comments '其他short name' %}</del>
 
+    {% my_duoshuo_comments data_thread_key data_title data_url %}
