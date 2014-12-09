@@ -3,12 +3,14 @@ from setuptools import setup, find_packages
 
 setup(
     name="duoshuo-python-sdk",
-    version="0.1",
+    version="0.1.1",
     description="A Python library for using the duoshuo API",
     long_description=open('README.md').read(),
     author="Perchouli",
     author_email="jp.chenyang@gmail.com",
-    url="https://github.com/duoshuo/duoshuo-python-sdk",
+    maintainer="njuaplusplus",
+    maintainer_email="njuaplusplus@gmail.com",
+    url="https://github.com/njuaplusplus/duoshuo-python-sdk",
     packages=find_packages(),
     package_data={
         'duoshuo' : ['*.json',]

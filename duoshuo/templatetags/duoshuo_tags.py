@@ -28,16 +28,46 @@ class DuoshuoCommentsNode(Node):
         </script>
         <!-- Duoshuo Comment END -->''' % self.short_name
         return code
-    
+
+@register.tag
 def duoshuo_comments(parser, token):
-    short_name = token.contents.split()   
     if DUOSHUO_SHORT_NAME:
         return DuoshuoCommentsNode(DUOSHUO_SHORT_NAME)
-    elif len(short_name) == 2:
-        return DuoshuoCommentsNode(short_name[1])
     else:
-        raise template.TemplateSyntaxError, "duoshuo_comments tag takes SHORT_NAME as exactly one argument"
-duoshuo_comments = register.tag(duoshuo_comments)
+        try:
+            tag_name, short_name = token.split_contents() # More robust than token.contents.split()
+        except ValueError:
+            raise template.TemplateSyntaxError("%r tag requires a single argument" % token.contents.split()[0])
+
+@register.simple_tag
+def my_duoshuo_comments(data_thread_key, data_title, data_url):
+    ''' 生成和通用代码一致的代码
+
+    data_thread_key 文章在站点中的ID
+    data_title      文章的标题
+    data_url        文章的网址
+    '''
+    code = '''<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread" data-thread-key="%s" data-title="%s" data-url="%s"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"%s"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+    <!-- Duoshuo Comment END -->''' % (data_thread_key, data_title, data_url, DUOSHUO_SHORT_NAME)
+    return code
+
+@register.filter
+def addstr(s1, s2):
+    ''' Concatenate s1 and s2
+    '''
+    return str(s1)+str(s2)
 
 # 生成remote_auth，使用JWT后弃用
 # @register.filter
