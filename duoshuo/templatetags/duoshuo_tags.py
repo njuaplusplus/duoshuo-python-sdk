@@ -5,6 +5,8 @@ from django.template import Library, Node
 
 DUOSHUO_SHORT_NAME = getattr(settings, "DUOSHUO_SHORT_NAME", None)
 DUOSHUO_SECRET = getattr(settings, "DUOSHUO_SECRET", None)
+SSO_LOGIN_URL = getattr(settings, "SSO_LOGIN_URL", None)
+SSO_LOGOUT_URL = getattr(settings, "SSO_LOGOUT_URL", None)
 
 register = Library()
 
@@ -22,7 +24,7 @@ class DuoshuoCommentsNode(Node):
             ds.type = 'text/javascript';ds.async = true;
             ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
             ds.charset = 'UTF-8';
-            (document.getElementsByTagName('head')[0] 
+            (document.getElementsByTagName('head')[0]
              || document.getElementsByTagName('body')[0]).appendChild(ds);
         })();
         </script>
@@ -56,11 +58,72 @@ def my_duoshuo_comments(data_thread_key, data_title, data_url):
         ds.type = 'text/javascript';ds.async = true;
         ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
         ds.charset = 'UTF-8';
-        (document.getElementsByTagName('head')[0] 
+        (document.getElementsByTagName('head')[0]
          || document.getElementsByTagName('body')[0]).appendChild(ds);
     })();
     </script>
     <!-- Duoshuo Comment END -->''' % (data_thread_key, data_title, data_url, DUOSHUO_SHORT_NAME)
+    return code
+
+@register.simple_tag
+def my_sso_duoshuo_comments(data_thread_key, data_title, data_url):
+    ''' 生成和通用代码一致的代码
+
+    data_thread_key 文章在站点中的ID
+    data_title      文章的标题
+    data_url        文章的网址
+    login           login url for sso
+    logout          logout url for sso
+    '''
+    code = '''<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-thread" data-thread-key="%s" data-title="%s" data-url="%s"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {
+        short_name:"%s",
+        sso: {
+            login: "%s",
+            logout: "%s"
+        }
+    };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+    <!-- Duoshuo Comment END -->''' % (data_thread_key, data_title, data_url, DUOSHUO_SHORT_NAME, SSO_LOGIN_URL, SSO_LOGOUT_URL)
+    return code
+
+@register.simple_tag
+def my_sso_duoshuo_login():
+    ''' 生成和通用代码一致的代码
+
+    login           login url for sso
+    logout          logout url for sso
+    '''
+    code = '''<!-- Duoshuo Comment BEGIN -->
+    <div class="ds-login form-signin"></div>
+    <script type="text/javascript">
+    var duoshuoQuery = {
+        short_name:"%s",
+        sso: {
+            login: "%s",
+            logout: "%s"
+        }
+    };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+    <!-- Duoshuo Comment END -->''' % (DUOSHUO_SHORT_NAME, SSO_LOGIN_URL, SSO_LOGOUT_URL)
     return code
 
 @register.filter

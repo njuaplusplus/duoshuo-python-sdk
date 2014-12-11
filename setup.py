@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="duoshuo-python-sdk",
-    version="0.1.1",
+    version="0.1.2",
     description="A Python library for using the duoshuo API",
     long_description=open('README.md').read(),
     author="Perchouli",
