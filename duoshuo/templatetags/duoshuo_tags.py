@@ -105,7 +105,7 @@ def my_sso_duoshuo_login():
     logout          logout url for sso
     '''
     code = '''<!-- Duoshuo Comment BEGIN -->
-    <div class="ds-login form-signin"></div>
+    <div class="ds-login"></div>
     <script type="text/javascript">
     var duoshuoQuery = {
         short_name:"%s",
