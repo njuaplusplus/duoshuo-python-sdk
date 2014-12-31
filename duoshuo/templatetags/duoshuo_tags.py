@@ -138,7 +138,7 @@ def my_sso_duoshuo_login(next_url=None):
 def addstr(s1, s2):
     ''' Concatenate s1 and s2
     '''
-    return str(s1)+str(s2)
+    return str(s1).strip().replace('"','-')+str(s2).strip().replace('"','-')
 
 # 生成remote_auth，使用JWT后弃用
 # @register.filter
