@@ -2,7 +2,7 @@
 
 对于 perchouli 的多说 django 部分进行了部分修改,
 
-添加了 `data-thread-key` `data-title` `data-url` 的支持. 详见 [Django useage](#django-usage)
+添加了 `data-thread-key` `data-title` `data-url` 以及 SSO 登录 的支持. 详见 [Django useage](#django-usage)
 
 ![Banner](https://raw.github.com/perchouli/img/master/banner-772x250.png)
 
@@ -86,3 +86,7 @@ sdk核心功能： 交换token，生成授权链接，调用api接口
     {% my_sso_duoshuo_login next_url(可选) %}
 
 其中 `next_url` 主要用于 SSO 登录之后的跳转, 可以不填.
+
+对于 SSO 的设置, 在 settings.py 中加入这两行
+`SSO_LOGIN_URL` = 'http://127.0.0.1:8000/accounts/login/'
+`SSO_LOGOUT_URL` = 'http://127.0.0.1:8000/accounts/logout/'
