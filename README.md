@@ -88,5 +88,6 @@ sdk核心功能： 交换token，生成授权链接，调用api接口
 其中 `next_url` 主要用于 SSO 登录之后的跳转, 可以不填.
 
 对于 SSO 的设置, 在 settings.py 中加入这两行
-`SSO_LOGIN_URL` = 'http://127.0.0.1:8000/accounts/login/'
-`SSO_LOGOUT_URL` = 'http://127.0.0.1:8000/accounts/logout/'
+
+    SSO_LOGIN_URL = 'http://127.0.0.1:8000/accounts/login/'
+    SSO_LOGOUT_URL = 'http://127.0.0.1:8000/accounts/logout/'
