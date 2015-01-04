@@ -59,7 +59,7 @@ sdk核心功能： 交换token，生成授权链接，调用api接口
 
 作为Django app来使用
 
-#### 安装duoshuo插件
+### 安装duoshuo插件
 
     # settings.py
     INSTALLED_APPS = (
@@ -70,7 +70,7 @@ sdk核心功能： 交换token，生成授权链接，调用api接口
     DUOSHUO_SECRET = '你的多说secret，在多说管理后台 - 设置 - 密钥'
     DUOSHUO_SHORT_NAME = '你的多说short name，比如你注册了example.duoshuo.com，short name就是example'
 
-#### 显示多说评论框
+### 显示多说评论框
 
     {% load duoshuo_tags %}
 
@@ -79,5 +79,10 @@ sdk核心功能： 交换token，生成授权链接，调用api接口
     # 给多说评论框传递其他short name
     {% duoshuo_comments '其他short name' %}
 
-    # 我扩展的 tag
+### 我扩展的 tag
+
     {% my_duoshuo_comments data_thread_key data_title data_url %}
+    {% my_sso_duoshuo_comments data_thread_key data_title data_url next_url(可选) %}
+    {% my_sso_duoshuo_login next_url(可选) %}
+
+其中 `next_url` 主要用于 SSO 登录之后的跳转, 可以不填.
