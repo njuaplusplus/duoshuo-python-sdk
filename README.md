@@ -4,6 +4,8 @@
 
 添加了 `data-thread-key` `data-title` `data-url` 以及 SSO 登录 的支持. 详见 [Django useage](#django-usage)
 
+可以参考我的博客 [Django 遇见 duoshuo](http://njuaplusplus.com/post/duoshuo-in-django/)
+
 ![Banner](https://raw.github.com/perchouli/img/master/banner-772x250.png)
 
 # Duoshuo Python SDK
