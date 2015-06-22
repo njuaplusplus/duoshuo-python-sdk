@@ -65,8 +65,8 @@ def my_duoshuo_comments(data_thread_key, data_title, data_url):
     <!-- Duoshuo Comment END -->''' % (data_thread_key, data_title, data_url, DUOSHUO_SHORT_NAME)
     return code
 
-@register.simple_tag
-def my_sso_duoshuo_comments(data_thread_key, data_title, data_url, next_url=None):
+@register.simple_tag(takes_context=True)
+def my_sso_duoshuo_comments(context, data_thread_key, data_title, data_url, next_url=None):
     ''' 生成和通用代码一致的代码
 
     data_thread_key 文章在站点中的ID
@@ -74,11 +74,13 @@ def my_sso_duoshuo_comments(data_thread_key, data_title, data_url, next_url=None
     data_url        文章的网址
     next_url        用于返回登录前页面
     '''
+    request = context['request']
+    http_host = request.get_host()
     login_url = SSO_LOGIN_URL
     logout_url = SSO_LOGOUT_URL
     if next_url is not None and len(next_url) > 0:
-        login_url = "%s?next=%s" % (SSO_LOGIN_URL, next_url)
-        logout_url = "%s?next=%s" % (SSO_LOGOUT_URL, next_url)
+        login_url = "http://%s/%s?next=%s" % (http_host, SSO_LOGIN_URL, next_url)
+        logout_url = "http://%s/%s?next=%s" % (http_host, SSO_LOGOUT_URL, next_url)
     code = '''<!-- Duoshuo Comment BEGIN -->
     <div class="ds-thread" data-thread-key="%s" data-title="%s" data-url="%s"></div>
     <script type="text/javascript">
@@ -101,17 +103,19 @@ def my_sso_duoshuo_comments(data_thread_key, data_title, data_url, next_url=None
     <!-- Duoshuo Comment END -->''' % (data_thread_key, data_title, data_url, DUOSHUO_SHORT_NAME, login_url, logout_url)
     return code
 
-@register.simple_tag
-def my_sso_duoshuo_login(next_url=None):
+@register.simple_tag(takes_context=True)
+def my_sso_duoshuo_login(context, next_url=None):
     ''' 生成和通用代码一致的代码
 
     next_url        用于返回登录前页面
     '''
+    request = context['request']
+    http_host = request.get_host()
     login_url = SSO_LOGIN_URL
     logout_url = SSO_LOGOUT_URL
     if next_url is not None and len(next_url) > 0:
-        login_url = "%s?next=%s" % (SSO_LOGIN_URL, next_url)
-        logout_url = "%s?next=%s" % (SSO_LOGOUT_URL, next_url)
+        login_url = "http://%s/%s?next=%s" % (http_host, SSO_LOGIN_URL, next_url)
+        logout_url = "http://%s/%s?next=%s" % (http_host, SSO_LOGOUT_URL, next_url)
     code = '''<!-- Duoshuo Comment BEGIN -->
     <div class="ds-login"></div>
     <script type="text/javascript">
