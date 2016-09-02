@@ -20,7 +20,7 @@ except ImportError:
 os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import duoshuo
 
-import utils
+from . import utils
 
 
 class DuoshuoAPITest(unittest.TestCase):

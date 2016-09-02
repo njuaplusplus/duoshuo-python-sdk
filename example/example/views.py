@@ -5,7 +5,7 @@ from django.template.response import TemplateResponse
 from django.shortcuts import render
 from accounts.models import UserProfile
 
-import settings
+from . import settings
 import jwt
 def home(request):
     duoshuo_jwt_token = None

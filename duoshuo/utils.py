@@ -8,15 +8,15 @@ import base64
 import hashlib
 import hmac
 import time
-import urllib
-import urllib2
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
+import urllib.parse
 import json
 import jwt
 
 try:
     from django.conf import settings
-except ValueError, ImportError:
+except ValueError as ImportError:
     settings = {}
     settings.DUOSHUO_SECRET = None
     settings.DUOSHUO_SHORT_NAME = None
@@ -70,7 +70,7 @@ def sync_article(article):
     api_url = 'http://api.duoshuo.com/threads/sync.json'
     #TODO: get article url from urls.py
     url_hash = hashlib.md5(article.url).hexdigest()
-    data = urllib.urlencode({
+    data = urllib.parse.urlencode({
         'short_name' : DUOSHUO_SHORT_NAME,
         'thread_key' : article.id,
         'url' : article.url,
@@ -78,7 +78,7 @@ def sync_article(article):
         'author_key' : author_id
     })
     
-    response = json.loads(urllib2.urlopen(api_url, data).read())['response']
+    response = json.loads(urllib.request.urlopen(api_url, data).read())['response']
     return response
 
 
@@ -88,11 +88,11 @@ def get_url(api, redirect_uri=None):
     else:
         params = {'client_id': api.short_name, 'redirect_uri': redirect_uri, 'response_type': 'code'}
         return '%s://%s/oauth2/%s?%s' % (api.uri_schema, api.host, 'authorize', \
-            urllib.urlencode(sorted(params.items())))
+            urllib.parse.urlencode(sorted(params.items())))
 
 def sync_comment(posts):
     api_url = 'http://56we.duoshuo.com/api/import/comments.json'
-    data = urllib.urlencode({
+    data = urllib.parse.urlencode({
        'data' : posts,
     })
-    response = json.loads(urllib2.urlopen(api_url, data).read())
+    response = json.loads(urllib.request.urlopen(api_url, data).read())

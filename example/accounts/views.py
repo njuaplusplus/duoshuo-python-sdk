@@ -18,7 +18,7 @@ def callback(request):
 
     response = api.get_token(code=code)
 
-    if response.has_key('user_key'): #此多说账号在本站已经注册过了，直接登录
+    if 'user_key' in response: #此多说账号在本站已经注册过了，直接登录
         user = User.objects.get(pk=int(response['user_key']))
         user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(request, user)

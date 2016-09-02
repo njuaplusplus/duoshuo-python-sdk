@@ -7,14 +7,17 @@ __version__ = '0.1'
 
 import os
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import warnings
-import urlparse
+import urllib.parse
 import hashlib
-import httplib
+import http.client
+from importlib import reload
+
+if sys.version[0] == '2':
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 try:
     import json
@@ -28,7 +31,7 @@ except ImportError:
         _parse_json = lambda s: simplejson.loads(s)
 
 try:
-    import Cookie
+    import http.cookies
 except ImportError:
     import https.cookies as cookie
 
@@ -81,7 +84,7 @@ class Resource(object):
 
         resource = self.interface
         for k in resource.get('required', []):
-            if k not in [x.split(':')[0] for x in kwargs.keys()]:
+            if k not in [x.split(':')[0] for x in list(kwargs.keys())]:
                 raise ValueError('Missing required argument: %s' % k)
 
         method = kwargs.pop('method', resource.get('method'))
@@ -97,12 +100,12 @@ class Resource(object):
             kwargs['short_name'] = api.short_name
         if 'data' in kwargs and type(kwargs['data']) == dict:
             user_data = kwargs.pop('data')
-            kwargs = dict(kwargs.items() + user_data.items())
+            kwargs = dict(list(kwargs.items()) + list(user_data.items()))
 
         # We need to ensure this is a list so that
         # multiple values for a key work
         params = []
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             if isinstance(v, (list, tuple)):
                 for val in v:
                     params.append((k, val))
@@ -110,11 +113,11 @@ class Resource(object):
                 params.append((k, v))
 
         if method == 'GET':
-            path = '%s?%s' % (path, urllib.urlencode(params))
-            response = urllib2.urlopen(path).read()
+            path = '%s?%s' % (path, urllib.parse.urlencode(params))
+            response = urllib.request.urlopen(path).read()
         else:
-            data = urllib.urlencode(params)
-            response = urllib2.urlopen(path, data).read()
+            data = urllib.parse.urlencode(params)
+            response = urllib.request.urlopen(path, data).read()
 
         try:
             return _parse_json(response)
@@ -154,10 +157,10 @@ class DuoshuoAPI(Resource):
                 'client_id': self.short_name,
                 'client_secret': self.secret,
             }
-            data = urllib.urlencode(params)
+            data = urllib.parse.urlencode(params)
             url = '%s://%s/oauth2/access_token' % (URI_SCHEMA, HOST)
-            request = urllib2.Request(url)
-            response = urllib2.build_opener(urllib2.HTTPCookieProcessor()).open(request, data)
+            request = urllib.request.Request(url)
+            response = urllib.request.build_opener(urllib.request.HTTPCookieProcessor()).open(request, data)
 
             return _parse_json(response.read())
 
